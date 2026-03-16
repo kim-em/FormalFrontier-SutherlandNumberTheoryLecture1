@@ -1,0 +1,137 @@
+[
+  {
+    "item_id": "Lecture1/Definition1.2",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Definition1.2.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Example1.3",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Example1.3.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Lemma1.4",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Lemma1.4.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Corollary1.5",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Corollary1.5.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Definition1.6",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Definition1.6.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Definition1.7",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Definition1.7.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Theorem1.8",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Theorem1.8.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Theorem1.9",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Theorem1.9.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Definition1.10",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Definition1.10.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Definition1.11",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Definition1.11.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Definition1.12",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Definition1.12.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Definition1.13",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Definition1.13.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Example1.14",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Example1.14.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Example1.15",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Example1.15.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Theorem1.16",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Theorem1.16.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Definition1.17",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Definition1.17.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Proposition1.18",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Proposition1.18.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Definition1.19",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Definition1.19.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Proposition1.20",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Proposition1.20.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Corollary1.21",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Corollary1.21.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Proposition1.22",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Proposition1.22.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Corollary1.23",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Corollary1.23.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Example1.24",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Example1.24.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Proposition1.25",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Proposition1.25.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Definition1.26",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Definition1.26.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Proposition1.28",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Proposition1.28.refs.md"
+  },
+  {
+    "item_id": "Lecture1/Example1.29",
+    "has_refs": true,
+    "refs_file": "blobs/Lecture1_Example1.29.refs.md"
+  }
+]

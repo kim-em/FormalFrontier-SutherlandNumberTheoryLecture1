@@ -1,4 +1,5 @@
 import Mathlib.RingTheory.Valuation.ValuationRing
+import Mathlib.RingTheory.Valuation.Integral
 import Mathlib.RingTheory.IntegralClosure.IntegrallyClosed
 
 /-!
@@ -21,7 +22,7 @@ namespace SutherlandNumberTheoryLecture1.Chapter1
 If A is a valuation ring (for every x in Frac(A), either x ∈ A or x⁻¹ ∈ A),
 then A is integrally closed in its fraction field. -/
 theorem valuationRing_isIntegrallyClosed (A : Type*) [CommRing A] [IsDomain A]
-    [ValuationRing A] : IsIntegrallyClosed A := by
-  sorry
+    [ValuationRing A] : IsIntegrallyClosed A :=
+  IsIntegrallyClosed.of_equiv (ValuationRing.equivInteger A (FractionRing A)).symm
 
 end SutherlandNumberTheoryLecture1.Chapter1

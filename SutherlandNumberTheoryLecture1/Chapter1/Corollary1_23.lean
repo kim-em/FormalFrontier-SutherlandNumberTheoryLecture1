@@ -17,7 +17,6 @@ namespace SutherlandNumberTheoryLecture1.Chapter1
 is integrally closed. This is `UniqueFactorizationMonoid.instIsIntegrallyClosed`
 in Mathlib. -/
 theorem ufd_isIntegrallyClosed (A : Type*) [CommRing A] [IsDomain A]
-    [UniqueFactorizationMonoid A] : IsIntegrallyClosed A := by
-  sorry
+    [UniqueFactorizationMonoid A] : IsIntegrallyClosed A := inferInstance
 
 end SutherlandNumberTheoryLecture1.Chapter1

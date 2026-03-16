@@ -1,0 +1,552 @@
+# FormalFrontier Formalization Plan
+
+This document describes the pipeline for formalizing a mathematics textbook into Lean 4 with Mathlib. Work through the stages in order. Record progress in per-turn files in `progress/` and item-level status in `progress/items.json`. Do not modify this file for progress tracking.
+
+## Phase 1: Source Preparation
+
+### Stage 1.1: Page Extraction
+
+Split the source PDF (`source/original.pdf`) into individual page files.
+
+```bash
+mkdir -p pdf/raw-pages
+pdfseparate source/original.pdf pdf/raw-pages/%d.pdf
+```
+
+**Output:** `pdf/raw-pages/1.pdf`, `pdf/raw-pages/2.pdf`, ...
+
+**Verify:** The number of files in `pdf/raw-pages/` matches the page count of the original PDF.
+
+### Stage 1.2: Start Lean Build
+
+The `lean/` directory was created by `ff init` using `lake init <ProjectName> math`, where `<ProjectName>` is the repository name with the `FormalFrontier-` prefix stripped (e.g., `FormalFrontier-Rudin` → `Rudin`). Start downloading Mathlib now so it is ready by the time formalization begins.
+
+```bash
+cd lean && lake build
+```
+
+This takes ~30 minutes the first time (Mathlib download and build). Start it in the background and proceed with the remaining Phase 1 stages. Having the Lean project available early allows agents to test Lean snippets while transcribing and analyzing structure.
+
+**Output:** `lean/.lake/` with compiled Mathlib artifacts.
+
+**Verify:** `cd lean && lake build` exits successfully.
+
+### Stage 1.3: Frontmatter Detection
+
+This is a **lightweight pass**. Start by examining the first ~20 pages and the last ~10 pages of `pdf/raw-pages/` — that is usually sufficient. If a book has an unusually long preface, TOC, or index, look at a few more pages until the boundary is clear. You do not need to read the entire book.
+
+Determine:
+- Where "page 1" of the book actually starts (after title page, copyright, table of contents, preface, etc.)
+- Where the backmatter begins (appendices, bibliography, index)
+
+Copy pages into `pdf/pages/` with the appropriate names. (`pdf/raw-pages/` is the untouched extraction output and must not be modified; `pdf/pages/` is the canonical input for all subsequent stages.)
+- `pdf/pages/1.pdf` corresponds to the book's actual page 1
+- Frontmatter pages become `pdf/pages/frontmatter-1.pdf`, `pdf/pages/frontmatter-2.pdf`, ...
+- Backmatter pages become `pdf/pages/backmatter-1.pdf`, `pdf/pages/backmatter-2.pdf`, ...
+
+**All pages are included** — frontmatter, main content, and backmatter all get entries in `pdf/pages/`. Nothing is discarded.
+
+After copying, write `pdf/pages/mapping.json` recording the raw-page → logical-page correspondence. This is the authoritative record of the frontmatter boundary decision; subsequent stages that need to map between raw and logical page numbers must read this file rather than reverse-engineering it from filenames.
+
+Format:
+```json
+{
+  "frontmatter_raw_pages": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+  "backmatter_raw_pages": [298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312],
+  "mapping": {
+    "1": "frontmatter-1",
+    "2": "frontmatter-2",
+    "13": "1",
+    "14": "2",
+    "298": "backmatter-1",
+    "299": "backmatter-2"
+  }
+}
+```
+
+Keys in `"mapping"` are raw page numbers (as strings); values are logical page names (matching the filenames in `pdf/pages/` without the `.pdf` extension). Every raw page appears exactly once as a key; every logical page name appears exactly once as a value; and the set of values corresponds exactly to the filenames present in `pdf/pages/`. `"frontmatter_raw_pages"` and `"backmatter_raw_pages"` are convenience lists for quick range queries; use `[]` for either when the book has no frontmatter or no backmatter.
+
+**Output:** `pdf/pages/` directory with all pages from `pdf/raw-pages/`, copied and renamed. `pdf/pages/mapping.json` recording the raw-page → logical-page correspondence.
+
+**Verify:**
+- Spot-check that page numbering matches the book's internal page numbers (printed on the pages themselves).
+- Every file in `pdf/raw-pages/` maps to exactly one file in `pdf/pages/` — no raw page is missing and no extra files are present.
+- `pdf/pages/mapping.json` exists and accounts for every raw page number.
+
+> **Do not begin Stage 1.4 until this stage is complete and `pdf/pages/` is fully populated.** Stage 1.4 reads exclusively from `pdf/pages/` — never from `pdf/raw-pages/`. If you are uncertain about frontmatter boundaries after examining the boundary pages, make your best determination; do not defer this decision into the transcription loop.
+
+### Stage 1.4: Page Transcription
+
+Convert each page to markdown with LaTeX math notation.
+
+Transcribe **all** pages — frontmatter, main content, and backmatter — every file in `pdf/pages/` gets a corresponding `.md` file. Read exclusively from `pdf/pages/` — never from `pdf/raw-pages/`. To look up which raw page corresponds to a given logical page (or vice versa), read `pdf/pages/mapping.json`.
+
+#### Setup
+
+Create one GitHub issue per page in this repo. Use `gh label create transcription --color 0075ca --description "Page transcription work item"` first (ignore error if it already exists). Each issue should:
+
+- Title: `Transcribe page N` for main-content pages; `Transcribe frontmatter-N` or `Transcribe backmatter-N` for frontmatter/backmatter pages
+- Body: list the specific input file(s) (e.g., `pdf/pages/42.pdf` or `pdf/pages/frontmatter-3.pdf`), expected output file(s) (e.g., `pages/42.md` or `pages/frontmatter-3.md`), and a dependency on the previous page's issue: `- [ ] depends on #(previous issue number)`
+- Label: `transcription`
+
+The dependency chain enforces linear processing so each agent can read the previously transcribed page for context. The first page's issue (frontmatter-1, or page 1 if there is no frontmatter) has no dependency. Order issues following the logical order already established in `pdf/pages/mapping.json`.
+
+After creating all issues, verify that every file in `pdf/pages/` is covered by exactly one issue and there are no gaps.
+
+This gives each transcription agent a single, well-scoped task and makes progress visible at page granularity. Partial failures are isolated — a missing page 47 doesn't block the rest.
+
+#### Shared notation conventions
+
+Create `pages/CONVENTIONS.md` before agents start work. Initially it may be sparse (just the book title and subject area). Each transcription agent must:
+
+1. Read `pages/CONVENTIONS.md` before transcribing
+2. After transcribing, update `pages/CONVENTIONS.md` with any notation or formatting conventions they established (e.g., how inline math is delimited, how theorem environments are marked up, abbreviations used)
+
+This file is the shared context that keeps transcriptions consistent across parallel agents. Commit it alongside the page `.md` file.
+
+#### Agent workflow
+
+Each agent assigned to a transcription issue:
+
+1. Reads `pages/CONVENTIONS.md` for established conventions
+2. Reads the previously transcribed `.md` file (if any) for style and formatting context
+3. Reads the specified PDF page(s) from `pdf/pages/`
+4. Writes the corresponding `.md` file(s) with LaTeX math notation, consistent with preceding pages
+5. Updates `pages/CONVENTIONS.md` with any new conventions introduced
+6. Commits directly to the default branch with `Fixes #N` in the commit message (which auto-closes the issue on push)
+
+**Output:** `pages/1.md`, `pages/2.md`, ..., `pages/frontmatter-1.md`, `pages/backmatter-1.md`, etc. Plus `pages/CONVENTIONS.md`.
+
+**Validation:** Consider round-tripping: render the markdown back to a visual format and compare with the original page. Flag pages where the transcription looks poor.
+
+**Verify:** One `.md` file per page in `pdf/pages/`. All transcription issues are closed.
+
+### Stage 1.5: Structure Analysis
+
+Identify every piece of content in the book and assign it to a blob. The goal is **complete, gap-free coverage**: every character of the transcribed text belongs to exactly one blob.
+
+#### What to identify
+
+**Formally numbered items:**
+- Theorems, lemmas, propositions, corollaries
+- Definitions
+- Examples, exercises
+- Remarks, notes
+
+**Unstructured text** (equally important — these are first-class items):
+- Chapter introductions
+- Discussion paragraphs between numbered items
+- Motivating text, informal explanations
+- Notation conventions, historical notes
+- Preface, foreword
+
+#### Identifier scheme
+
+- Numbered items: `Chapter3/Theorem3.1`, `Chapter3/Definition3.2`
+- Discussion text between items: `Chapter3/Discussion_after_3.2` (covering all text from after Definition 3.2 until the next numbered item)
+- Chapter introductions (text before the first numbered item): `Chapter3/Introduction`
+- Frontmatter blobs: `Frontmatter/Preface`, `Frontmatter/Notation`, `Frontmatter/TableOfContents`
+- Backmatter blobs: `Backmatter/Bibliography`, `Backmatter/Index`
+
+#### Output format
+
+Write `items.json` with an array of items, each having:
+```json
+{
+  "id": "Chapter3/Theorem3.1",
+  "type": "theorem",
+  "title": "Bolzano-Weierstrass Theorem",
+  "start_page": "45",
+  "end_page": "46",
+  "start_line": 12,
+  "end_line": 3
+}
+```
+
+Where `start_line` and `end_line` refer to line numbers within the page markdown files. `start_page` and `end_page` are logical page names (strings matching the `pdf/pages/` filenames without the `.pdf` extension, e.g. `"45"`, `"frontmatter-3"`, `"backmatter-1"`).
+
+Types: `theorem`, `lemma`, `proposition`, `corollary`, `definition`, `example`, `exercise`, `remark`, `discussion`, `introduction`, `preface`, `notation`, `bibliography`, `index`
+
+**Contiguity check:** Run a check to verify that:
+1. Every line of every page markdown file belongs to exactly one blob
+2. There are no gaps between consecutive blobs
+3. There are no overlaps
+4. The blobs, when concatenated in order, reproduce the complete text
+
+**Verify:** `items.json` exists and passes the contiguity check.
+
+### Stage 1.6: Blob Extraction
+
+Split the page-level markdown into per-blob files, one file per item in `items.json`.
+
+**Output:** `blobs/Chapter1/Definition1.1.md`, `blobs/Chapter1/Discussion_after_1.1.md`, ...
+
+**Verify:**
+- One blob file per item in `items.json`
+- Concatenating all blob files in order reproduces the complete transcribed text
+
+### Stage 1.7: Indexing (optional)
+
+Build one-line summaries for each blob, useful for quick reference and RAG.
+
+**Output:** `index/summaries.json`
+
+This stage is optional. Agents can also just read blob files directly.
+
+---
+
+## Phase 2: Dependency Mapping
+
+### Stage 2.1: Internal Dependency Analysis
+
+Read the text linearly, noting every internal reference:
+
+- **Explicit references:** "by Lemma 5.6.7", "from Theorem 2.3", "as defined in Definition 1.4"
+- **Structural declarations:** "This chapter depends only on Chapters 1 and 2", "We assume familiarity with Chapter 3"
+- **Implicit dependencies:** Uses a concept or definition from earlier without citing it
+
+**Initial assumption:** List only **direct** dependencies — do not store transitive closure. The conservative default is a **linear chain**: each item directly depends only on its immediate predecessor in book order. For example, if items are A, B, C in order: B depends on `["A"]` and C depends on `["B"]` — not `["A", "B"]`. If the text explicitly states independence (e.g., "this chapter does not use Chapter 3"), trim accordingly. We will replace this chain with actual direct dependencies in Stage 3.3.
+
+**File size check:** `internal.json` should have approximately N entries of 0–1 elements each (for N items). If entries grow with item count (e.g., item 100 has 99 entries), you have stored transitive closure — regenerate with direct dependencies only.
+
+**Output:** `dependencies/internal.json` — a mapping from each item ID to a list of item IDs it **directly** depends on.
+
+**Verify:** Every reference target exists in `items.json`.
+
+### Stage 2.2: External Dependency Analysis
+
+Identify mathematical concepts, definitions, and results that the book assumes but does not prove.
+
+Categorize each:
+- **Undergraduate prerequisites:** Linear algebra, basic analysis, group theory basics, etc.
+- **Results from other books:** Specific theorems cited from external sources
+- **Folklore/well-known facts:** Results stated without proof and without citation
+
+**Output:** `dependencies/external.json` — a list of external dependencies, each with a description, the items that need it, and the category.
+
+### Stage 2.3: Blueprint Assembly
+
+Combine `items.json`, `dependencies/internal.json`, and `dependencies/external.json` into a preliminary blueprint.
+
+This is a DAG of what needs to be formalized and in what order. Because the initial dependencies form a linear chain (each item depends only on its immediate predecessor), the initial DAG is a single path. That is fine — it will be refined in Stage 3.3.
+
+#### Blueprint tooling
+
+The blueprint uses a hybrid of two tools:
+
+- **leanblueprint** (https://github.com/PatrickMassot/leanblueprint): The rendering substrate. Produces an interactive HTML website with a dependency DAG and a PDF document. Uses LaTeX source with special macros (`\uses{}`, `\lean{}`, `\leanok`). This handles **all** blueprint nodes — both formal declarations and non-formal content (discussion blobs, introductions, external dependencies).
+- **LeanArchitect** (https://github.com/hanwenzhu/LeanArchitect, using https://github.com/kim-em/LeanArchitect/tree/blueprint-all until https://github.com/hanwenzhu/LeanArchitect/pull/8 is merged): Complements leanblueprint for Lean-backed nodes. Run externally with `extract_blueprint --all` against the project's compiled `.olean` files — no `require`, `import`, or attributes needed in the Lean source. Automatically infers dependencies between formal declarations and tracks formalization status via sorry detection. Provides JSON export for agent consumption.
+
+The split: leanblueprint owns the full DAG (formal + non-formal nodes). LeanArchitect automates the Lean-backed portion (theorems, definitions, lemmas), eliminating manual `\leanok` and `\uses{}` maintenance for those nodes. Non-formal nodes (discussion, introductions, external dependencies) use leanblueprint's LaTeX macros directly. The Lean source files are completely free of blueprint annotations.
+
+#### Steps
+
+1. Set up leanblueprint scaffolding in `blueprint/` (use `leanblueprint new` or copy from a template).
+2. Generate LaTeX blueprint nodes from `items.json` and dependency data. Each item becomes a LaTeX environment with `\label{}` and `\uses{}` annotations.
+3. Non-formalizable items (discussion, introduction, etc.) are included as LaTeX nodes for completeness — they appear in the DAG but don't need Lean declarations.
+4. Run `leanblueprint web` to generate the HTML dependency graph.
+
+The initial blueprint is purely LaTeX-based. LeanArchitect integration happens after Stage 3.1 when Lean scaffolding is compiled — run `extract_blueprint --all --json` against the `.olean` files to get the dependency graph and formalization status.
+
+**Output:** `blueprint/` directory with leanblueprint LaTeX source files.
+
+**Verify:** `leanblueprint web` succeeds and produces a valid dependency graph.
+
+### Stage 2.4: Research — Mathlib Coverage
+
+For each external dependency and each item, search Mathlib for relevant material.
+
+- Is this definition already in Mathlib? Under what name?
+- Is this theorem already proved? At what generality?
+- What's the closest Mathlib result, even if not an exact match?
+
+**Output:** `research/mathlib-coverage.json` — mapping items and external deps to Mathlib declarations (with `#check` names).
+
+### Stage 2.5: Research — External Sources
+
+For items and dependencies not covered by Mathlib:
+
+- Other FormalFrontier artifacts that cover this material
+- External Lean libraries
+- Natural language sources with detailed proofs (useful for formalization agents)
+
+**Output:** `research/external-sources.json`
+
+### Stage 2.6: Readiness Report
+
+Prepare a human-readable report summarizing:
+
+- Which items are ready to formalize (all dependencies satisfied by Mathlib or already formalized items)
+- Which items are blocked and on what
+- Suggested formalization order
+- Any concerns about definitions, generality, or missing infrastructure
+
+**Output:** `READINESS.md`
+
+**Note:** This report is informational — do not pause for human review. Write the report and immediately continue to Stage 2.7.
+
+### Stage 2.7: Reference Attachment
+
+For each blob that has external dependencies or Mathlib matches, create a companion reference file.
+
+These files are read by formalization agents when they work on the corresponding item, giving them immediate access to relevant Mathlib names, similar theorems, and context.
+
+**Output:** `blobs/Chapter1/Theorem1.2.refs.md` alongside each blob that has references.
+
+---
+
+## Phase 3: Formalization
+
+### Stage 3.1: Lean Scaffolding
+
+The `lean/` project was created by `ff init` in Stage 1.2 and Mathlib was built then. Create `.lean` files for each formalizable item (theorems, definitions, lemmas — not discussion blobs).
+
+Set up the import chain:
+- Root file: `lean/{Title}.lean` importing all chapter files
+- Chapter files: `lean/{Title}/Chapter1.lean` importing all items in the chapter
+- Item files: `lean/{Title}/Chapter1/Theorem1_1.lean` with a sorry'd statement
+
+Each item file should contain:
+- A sorry'd `theorem` or `def` statement based on the blob's content
+- A doc-string with the natural language statement from the book
+- Appropriate Mathlib imports
+
+No blueprint-specific annotations are needed — LeanArchitect runs externally with `--all` to extract the blueprint from the compiled `.olean` files.
+
+Example:
+```lean
+/-- **Bolzano-Weierstrass Theorem.** Every bounded sequence in ℝ has a convergent subsequence. -/
+theorem bolzano_weierstrass {s : ℕ → ℝ} (hb : Bornology.IsBounded (Set.range s)) :
+    ∃ φ : ℕ → ℕ, StrictMono φ ∧ ∃ L, Filter.Tendsto (s ∘ φ) Filter.atTop (nhds L) := by
+  sorry
+```
+
+Once scaffolding is complete, run `extract_blueprint single --all --json` against each module's `.olean` to get the blueprint JSON, and `leanblueprint web` to update the HTML dependency graph.
+
+**Output:** `lean/{Title}/Chapter1/Theorem1_1.lean`, etc.
+
+**Verify:** `cd lean && lake build` succeeds (everything compiles with sorries).
+
+### Stage 3.2: Formalization Work Loop
+
+Orchestrate agents to formalize items, respecting the dependency DAG from the blueprint. Uses a tiered strategy: Claude agents first, with escalation to Aristotle (an automated theorem prover) for difficult proofs.
+
+#### PR lifecycle
+
+PRs must be merged to `main` without human intervention to avoid blocking downstream agents. Every PR should have auto-merge enabled at creation time:
+
+```bash
+gh pr create --title "Formalize <ItemID>" --body "..."
+PR_NUM=$(gh pr view --json number --jq .number)
+gh pr merge "$PR_NUM" --auto --squash
+```
+
+At the **start of every planning cycle**, before selecting new work, merge all PRs that are mergeable and have no failing CI checks:
+
+```bash
+gh pr list --state open \
+  --json number,mergeable,statusCheckRollup \
+  --jq '.[] | select(
+    .mergeable == "MERGEABLE" and
+    (.statusCheckRollup | all(.conclusion != "FAILURE" and .conclusion != "CANCELLED"))
+  ) | .number' \
+| xargs -I{} gh pr merge {} --squash --delete-branch
+```
+
+#### Agent workflow
+
+Each agent is assigned a task (an item or small group of related items). The agent either:
+1. **Submits a PR** that fully or partially resolves the task (with auto-merge enabled)
+2. **Escalates by posting an issue** documenting the blockers
+
+#### Task selection
+
+Agents query the blueprint to find ready work:
+1. Run `extract_blueprint single --all --json` against each module to get the current dependency graph and formalization status.
+2. Find nodes that still contain `sorry` but whose dependency nodes are all sorry-free.
+3. These are the items ready for formalization — pick one and work on it.
+
+Status updates are automatic: when an agent removes a `sorry`, the next extraction reflects the new status. No annotations needed in the Lean source. Non-formal nodes (discussion, external dependencies) are tracked via leanblueprint's LaTeX macros and `progress/items.json`.
+
+#### Tiered proving strategy
+
+Use a tiered approach to maximize throughput:
+
+1. **Claude first** — Claude agents attempt initial formalization: statement formalization, straightforward proofs, and definition translation. Most textbook items should be attempted by Claude first.
+
+2. **Escalate to Aristotle** — When a Claude agent fails to prove a theorem after 2-3 serious attempts, escalate to Aristotle. Record the escalation in `progress/items.json` by setting `"escalated_to_aristotle": true`.
+
+3. **Aristotle batch pass** — After Stage 3.1 scaffolding is complete, submit all sorry'd theorems to Aristotle as a batch. This runs concurrently with Claude agents working on other items. Any theorems Aristotle solves reduce the workload for Claude.
+
+#### Aristotle integration
+
+Aristotle is an automated theorem proving service that can fill `sorry` placeholders in Lean files. It is especially effective for standard mathematical proofs that follow well-known patterns.
+
+##### Submitting to Aristotle
+
+For each item to submit:
+
+1. **Prepare the file.** Create a temporary copy of the item's Lean file. The file must contain exactly one `sorry` (the target theorem). Change all other `sorry` occurrences to `admit`.
+
+2. **Gather context.** Collect sorry-free local Lean files that this item depends on (from the import chain). Skip Mathlib imports — Aristotle has Mathlib built in. If no local files are sorry-free yet (e.g., during the initial batch pass after Stage 3.1), submit with no context files. Pass context via `--context-files`.
+
+3. **Submit.**
+   ```bash
+   aristotle prove-from-file item_pending.lean --no-wait \
+     --no-auto-add-imports --context-files dep1.lean dep2.lean
+   ```
+
+4. **Record the project ID.** Aristotle returns a UUID. Store it in `progress/items.json`:
+   ```json
+   {
+     "Chapter1/Theorem1.1": {
+       "status": "sent_to_aristotle",
+       "aristotle_id": "uuid-here",
+       "last_updated": "2026-03-20"
+     }
+   }
+   ```
+
+5. **Clean up.** Delete the temporary file. Never commit files with `admit`.
+
+##### Monitoring and retrieval
+
+- **Poll every 5 minutes** for completion using the `aristotlelib` Python API.
+- **Respect the concurrency limit:** Aristotle allows at most 5 concurrent projects. Queue excess items and submit as slots free up.
+- **Deduplication:** Before submitting, check that the item is not already in `sent_to_aristotle` status. Only one submission per item at a time.
+- When a project completes, download the result to a temporary file for verification.
+
+##### Incorporating results
+
+When Aristotle returns a result:
+
+1. **Verify it compiles** against the local toolchain: copy the proof into the item's Lean file (under `lean/{Title}/...`) and run `lake build` for that module.
+2. **If it compiles clean:** Update status to `sorry_free` (if the item has no remaining sorries) or `proof_formalized`. Submit a PR.
+3. **If Aristotle reports the theorem is false:** Mark the item as `attention_needed`. Post a GitHub issue describing the counterexample Aristotle found. The formalized statement (from Stage 3.1) needs revision.
+4. **If it fails to compile** (toolchain version mismatch): Mark the item as `attention_needed` for manual review.
+
+##### Aristotle item statuses
+
+Items going through Aristotle use these statuses in `progress/items.json`:
+
+`statement_formalized` → `sent_to_aristotle` → `sorry_free` (success) or `attention_needed` (failure)
+
+#### Dependency tracking
+
+- Use `- [ ] depends on #X` comments in issues
+- Use a `blocked` label for items waiting on dependencies
+- Agents should not work on items whose dependencies aren't yet formalized (unless they are willing to sorry the dependencies and work top-down)
+
+#### Triage
+
+Specialized triage agents should periodically review open issues for:
+- Definition correctness problems (wrong definition, insufficient generality)
+- Missing low-level API lemmas needed across multiple items
+- Dependency ordering mistakes
+- Opportunities for useful tactics or metaprograms
+- Aristotle results that need attention (false statements, version mismatches)
+
+#### Formalization guidance
+
+- **Push sorries earlier:** Work top-down. State the theorem, sorry the proof, then work on filling in the sorry. Don't waste time on helper lemmas until you know they're needed.
+- **Spec-driven development:** Use sorry placeholders with comments explaining what's needed, not `True` or other cheats.
+- **Pre-formalization:** For complex items, first translate the natural language blob into a pedantic, detailed version with careful references to every fact used, before attempting formalization.
+
+### Stage 3.3: Dependency Trimming (post-formalization)
+
+Once items have sorry-free proofs, analyze actual dependencies using both LeanArchitect's inference (for formal declarations) and manual review (for non-formal nodes).
+
+For Lean-backed nodes, LeanArchitect automatically infers dependencies from proof terms — compare these against the conservative initial dependencies. For non-formal nodes (discussion blobs, external dependencies), review whether the initial dependency assumptions were accurate.
+
+Compare the inferred/reviewed dependencies against `dependencies/internal.json`:
+- Which initial dependencies turned out to be unnecessary?
+- Are there unexpected dependencies that weren't in the original analysis?
+- Does the actual dependency structure reveal anything interesting about the book's organization?
+
+This is when we learn the true dependency structure of the book, which may differ significantly from the conservative initial assumption.
+
+**Output:** Updated `dependencies/internal.json` and blueprint reflecting actual dependencies.
+
+---
+
+## Progress Tracking
+
+### Per-turn progress files: `progress/YYYY-MM-DDTHH-MM-SSZ.md`
+
+At the end of every agent turn, write a timestamped progress file in `progress/`. Use the current UTC time for the filename (e.g., `progress/2026-03-15T14-30-00Z.md`). This gives a full audit trail of what each agent did and decided, and reliably onboards the next agent.
+
+Template:
+```markdown
+## Accomplished
+<!-- What was done this turn -->
+
+## Current frontier
+<!-- Where work stopped -->
+
+## Overall project progress
+<!-- High-level status (which stages are complete, how many items are formalized, etc.) -->
+
+## Next step
+<!-- Concrete recommendation for the next agent -->
+
+## Blockers
+<!-- Anything blocking forward progress; empty if none -->
+```
+
+The most recent file in `progress/` (sorted alphabetically, since filenames are ISO 8601 timestamps) is the canonical handoff document for the next agent. **Always read it at the start of a turn** before checking `PLAN.md` for stage details. If `progress/` contains only `progress/0000-init.md` (or no handoff file at all), the repo is freshly initialized — proceed with Stage 1.1.
+
+Commits made during a turn should mention the corresponding progress file in the commit message (e.g., `See progress/2026-03-15T14-30-00Z.md`).
+
+### Stage-level summary: `PROGRESS.md` (optional)
+
+`PROGRESS.md` may be maintained as a human-facing summary of stage completion. It is not the primary source of truth — the per-turn files are. If kept, format:
+
+```markdown
+## Stage 1.1: Page Extraction
+**Status:** Complete
+**Date:** 2026-03-15
+**Notes:** 342 pages extracted.
+
+## Stage 1.2: Start Lean Build
+**Status:** Complete
+**Date:** 2026-03-15
+**Notes:** Mathlib downloaded and built successfully.
+
+## Stage 1.3: Frontmatter Detection
+**Status:** Complete
+**Date:** 2026-03-15
+**Notes:** Page 1 starts at raw page 13. Backmatter from raw page 298. See `pdf/pages/mapping.json` for the full raw-page → logical-page mapping.
+```
+
+### Item-level progress: `progress/items.json`
+
+Item statuses flow through:
+`identified` → `extracted` → `statement_formalized` → `proof_formalized` → `sorry_free` → `dependency_trimmed`
+
+Items escalated to Aristotle use: `statement_formalized` → `sent_to_aristotle` → `sorry_free` (success) or `attention_needed` (failure)
+
+```json
+{
+  "Chapter1/Theorem1.1": {
+    "status": "sorry_free",
+    "last_updated": "2026-03-20",
+    "pr": "#42",
+    "notes": ""
+  },
+  "Chapter2/Theorem2.3": {
+    "status": "sent_to_aristotle",
+    "last_updated": "2026-03-21",
+    "aristotle_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "escalated_to_aristotle": true,
+    "notes": "Claude failed after 3 attempts, escalated"
+  }
+}
+```
+
+### Rules
+
+- **Do NOT modify PLAN.md** for progress tracking. This document is the reference plan.
+- Per-turn handoff notes go in `progress/YYYY-MM-DDTHH-MM-SSZ.md` (write one at the end of every turn).
+- Stage-level summary may be kept in `PROGRESS.md` (optional, human-facing).
+- Item-level progress goes in `progress/items.json`.
+- Blockers and discussion go in GitHub issues.

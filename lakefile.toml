@@ -19,5 +19,9 @@ name = "LeanArchitect"
 git = "https://github.com/kim-em/LeanArchitect.git"
 rev = "blueprint-all"
 
+[[require]]
+name = "checkdecls"
+git = "https://github.com/PatrickMassot/checkdecls.git"
+
 [[lean_lib]]
 name = "SutherlandNumberTheoryLecture1"

@@ -1,0 +1,268 @@
+[
+  {
+    "id": "Lecture1/Introduction",
+    "type": "introduction",
+    "status": "not_applicable",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Remark1.1",
+    "type": "remark",
+    "status": "not_applicable",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Discussion_after_1.1",
+    "type": "discussion",
+    "status": "not_applicable",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Definition1.2",
+    "type": "definition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Example1.3",
+    "type": "example",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Lemma1.4",
+    "type": "lemma",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Corollary1.5",
+    "type": "corollary",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Definition1.6",
+    "type": "definition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Discussion_after_1.6",
+    "type": "discussion",
+    "status": "not_applicable",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Definition1.7",
+    "type": "definition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Theorem1.8",
+    "type": "theorem",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Theorem1.9",
+    "type": "theorem",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Discussion_after_1.9",
+    "type": "discussion",
+    "status": "not_applicable",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Definition1.10",
+    "type": "definition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Definition1.11",
+    "type": "definition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Definition1.12",
+    "type": "definition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Definition1.13",
+    "type": "definition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Discussion_after_1.13",
+    "type": "discussion",
+    "status": "not_applicable",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Example1.14",
+    "type": "example",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Example1.15",
+    "type": "example",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Discussion_after_1.15",
+    "type": "discussion",
+    "status": "not_applicable",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Theorem1.16",
+    "type": "theorem",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Discussion_after_1.16",
+    "type": "discussion",
+    "status": "not_applicable",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Definition1.17",
+    "type": "definition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Proposition1.18",
+    "type": "proposition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Definition1.19",
+    "type": "definition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Proposition1.20",
+    "type": "proposition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Corollary1.21",
+    "type": "corollary",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Proposition1.22",
+    "type": "proposition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Corollary1.23",
+    "type": "corollary",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Example1.24",
+    "type": "example",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Proposition1.25",
+    "type": "proposition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Definition1.26",
+    "type": "definition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Remark1.27",
+    "type": "remark",
+    "status": "not_applicable",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Proposition1.28",
+    "type": "proposition",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Example1.29",
+    "type": "example",
+    "status": "not_started",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/References",
+    "type": "bibliography",
+    "status": "not_applicable",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  },
+  {
+    "id": "Lecture1/Backmatter",
+    "type": "discussion",
+    "status": "not_applicable",
+    "lean_file": "",
+    "aristotle_project_id": ""
+  }
+]

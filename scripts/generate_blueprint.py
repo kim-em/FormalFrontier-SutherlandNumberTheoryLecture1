@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Generate blueprint/src/content.tex from items.json and dependency data."""
+"""Generate blueprint/src/content.tex from items.json and dependency data.
+
+If LeanArchitect JSON output exists in .lake/build/blueprint/module/,
+automatically adds \\lean{} and \\leanok annotations to formalizable items.
+Run `lake build :blueprint` (or extract_blueprint --all) first to generate
+the JSON data.
+"""
 
 import json
 import re
@@ -11,6 +17,34 @@ ROOT = Path(__file__).resolve().parent.parent
 def load_json(path):
     with open(path) as f:
         return json.load(f)
+
+def load_lean_architect_data():
+    """Load LeanArchitect JSON output and build a mapping from module name
+    (e.g. 'Definition1_2') to a list of {name, sorry_free} dicts."""
+    blueprint_dir = ROOT / ".lake" / "build" / "blueprint" / "module" / "SutherlandNumberTheoryLecture1" / "Chapter1"
+    if not blueprint_dir.exists():
+        return {}
+    result = {}
+    for jf in sorted(blueprint_dir.glob("*.json")):
+        module = jf.stem  # e.g. "Definition1_2"
+        data = json.load(open(jf))
+        decls = []
+        for item in data:
+            if item["type"] == "node":
+                d = item["data"]
+                decls.append({
+                    "name": d["name"],
+                    "sorry_free": d["hasLean"],
+                })
+        result[module] = decls
+    return result
+
+def item_id_to_module(item_id):
+    """Map an item ID like 'Lecture1/Definition1.2' to a module name like 'Definition1_2'."""
+    # Extract the part after the last /
+    part = item_id.split("/")[-1]
+    # Replace dots with underscores: "Definition1.2" -> "Definition1_2"
+    return part.replace(".", "_")
 
 def sanitize_label(item_id):
     """Convert item ID to a valid LaTeX label."""
@@ -59,6 +93,12 @@ def main():
     items = load_json(ROOT / "items.json")
     internal_deps = load_json(ROOT / "dependencies" / "internal.json")
     external_deps = load_json(ROOT / "dependencies" / "external.json")
+    lean_data = load_lean_architect_data()
+
+    if lean_data:
+        print(f"Found LeanArchitect data for {len(lean_data)} modules")
+    else:
+        print("No LeanArchitect data found (run `lake build :blueprint` or extract_blueprint --all first)")
 
     # Build reverse map: item_id -> list of external dep IDs that it uses
     ext_used_by = {}  # ext_id -> list of item_ids
@@ -91,6 +131,7 @@ def main():
     lines.append(r"\chapter{Lecture 1}")
     lines.append("")
 
+    formalized_count = 0
     for item in items:
         item_id = item["id"]
         item_type = item["type"]
@@ -117,7 +158,17 @@ def main():
         if deps:
             lines.append(r"\uses{%s}" % ", ".join(deps))
 
-        if not is_formalizable(item_type):
+        # Add \lean{} and \leanok from LeanArchitect data
+        if is_formalizable(item_type):
+            module = item_id_to_module(item_id)
+            decls = lean_data.get(module, [])
+            if decls:
+                decl_names = ", ".join(d["name"] for d in decls)
+                lines.append(r"\lean{%s}" % decl_names)
+                if all(d["sorry_free"] for d in decls):
+                    lines.append(r"\leanok")
+                    formalized_count += 1
+        else:
             lines.append(r"\discussion{%s}" % label)
 
         lines.append(r"[%s: %s]" % (item_type.capitalize(), title))
@@ -129,7 +180,9 @@ def main():
 
     out_path = ROOT / "blueprint" / "src" / "content.tex"
     out_path.write_text(content)
+    total_formalizable = sum(1 for i in items if is_formalizable(i["type"]))
     print(f"Wrote {out_path} ({len(items)} items + {len(external_deps)} external deps)")
+    print(f"Formalization status: {formalized_count}/{total_formalizable} items linked to sorry-free Lean code")
 
 if __name__ == "__main__":
     main()

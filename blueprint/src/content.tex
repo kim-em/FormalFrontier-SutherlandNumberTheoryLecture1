@@ -239,30 +239,40 @@ Category: external\_result.
 \begin{definition}[Absolute value on a field]
 \label{Lecture1:Definition1.2}
 \uses{Lecture1:Discussion_after_1.1, ext:field, ext:real-numbers, ext:triangle-inequality}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.absoluteValue_def, SutherlandNumberTheoryLecture1.Chapter1.isNonarchimedean_def}
+\leanok
 [Definition: Absolute value on a field]
 \end{definition}
 
 \begin{example}[Trivial absolute value]
 \label{Lecture1:Example1.3}
 \uses{Lecture1:Definition1.2, ext:field, ext:real-numbers}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.trivialAbsoluteValue, SutherlandNumberTheoryLecture1.Chapter1.trivialAbsoluteValue_apply_ne_zero, SutherlandNumberTheoryLecture1.Chapter1.trivialAbsoluteValue_isNonarchimedean}
+\leanok
 [Example: Trivial absolute value]
 \end{example}
 
 \begin{lemma}[Nonarchimedean characterization]
 \label{Lecture1:Lemma1.4}
 \uses{Lecture1:Example1.3, ext:field}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.nonarchimedean_iff_natCast_le_one}
+\leanok
 [Lemma: Nonarchimedean characterization]
 \end{lemma}
 
 \begin{corollary}[Positive characteristic implies nonarchimedean]
 \label{Lecture1:Corollary1.5}
 \uses{Lecture1:Lemma1.4, ext:field, ext:finite-fields}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.posChar_isNonarchimedean, SutherlandNumberTheoryLecture1.Chapter1.finite_field_absval_trivial}
+\leanok
 [Corollary: Positive characteristic implies nonarchimedean]
 \end{corollary}
 
 \begin{definition}[Equivalent absolute values]
 \label{Lecture1:Definition1.6}
 \uses{Lecture1:Corollary1.5, ext:field, ext:real-numbers}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.AbsoluteValue.AreEquivalent}
+\leanok
 [Definition: Equivalent absolute values]
 \end{definition}
 
@@ -276,18 +286,24 @@ Category: external\_result.
 \begin{definition}[p-adic valuation and absolute value]
 \label{Lecture1:Definition1.7}
 \uses{Lecture1:Discussion_after_1.6, ext:integers, ext:rationals, ext:primes-and-divisibility, ext:fundamental-theorem-of-arithmetic}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.padicNorm_eq_zero_iff, SutherlandNumberTheoryLecture1.Chapter1.padicNorm_nonarchimedean}
+\leanok
 [Definition: p-adic valuation and absolute value]
 \end{definition}
 
 \begin{theorem}[Ostrowski's Theorem]
 \label{Lecture1:Theorem1.8}
 \uses{Lecture1:Definition1.7, ext:rationals}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.ostrowski}
+\leanok
 [Theorem: Ostrowski's Theorem]
 \end{theorem}
 
 \begin{theorem}[Product Formula]
 \label{Lecture1:Theorem1.9}
 \uses{Lecture1:Theorem1.8, ext:rationals}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.padicNorm_eq_one_of_not_dvd, SutherlandNumberTheoryLecture1.Chapter1.product_formula}
+\leanok
 [Theorem: Product Formula]
 \end{theorem}
 
@@ -301,24 +317,32 @@ Category: external\_result.
 \begin{definition}[Valuation, value group, valuation ring, DVR]
 \label{Lecture1:Definition1.10}
 \uses{Lecture1:Discussion_after_1.9, ext:field, ext:ring, ext:integral-domain, ext:ideal-theory, ext:real-numbers, ext:fraction-field, ext:group-homomorphism, ext:discrete-subgroups-of-R}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.valuation_def, SutherlandNumberTheoryLecture1.Chapter1.dvr_def, SutherlandNumberTheoryLecture1.Chapter1.valuationRing_of_field}
+\leanok
 [Definition: Valuation, value group, valuation ring, DVR]
 \end{definition}
 
 \begin{definition}[Valuation ring (general definition)]
 \label{Lecture1:Definition1.11}
 \uses{Lecture1:Definition1.10, ext:ring, ext:integral-domain, ext:ideal-theory, ext:fraction-field, ext:pid, ext:ufd}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.valuationRing_def}
+\leanok
 [Definition: Valuation ring (general definition)]
 \end{definition}
 
 \begin{definition}[Local ring]
 \label{Lecture1:Definition1.12}
 \uses{Lecture1:Definition1.11, ext:ring, ext:ideal-theory}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.localRing_def}
+\leanok
 [Definition: Local ring]
 \end{definition}
 
 \begin{definition}[Residue field]
 \label{Lecture1:Definition1.13}
 \uses{Lecture1:Definition1.12, ext:ideal-theory}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.residueField_def}
+\leanok
 [Definition: Residue field]
 \end{definition}
 
@@ -332,12 +356,16 @@ Category: external\_result.
 \begin{example}[p-adic valuation ring]
 \label{Lecture1:Example1.14}
 \uses{Lecture1:Discussion_after_1.13, ext:ideal-theory, ext:integers, ext:primes-and-divisibility, ext:finite-fields, ext:localization}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.localization_at_prime_is_dvr, SutherlandNumberTheoryLecture1.Chapter1.localization_at_prime_residue_field}
+\leanok
 [Example: p-adic valuation ring]
 \end{example}
 
 \begin{example}[Laurent series valuation]
 \label{Lecture1:Example1.15}
 \uses{Lecture1:Example1.14, ext:field, ext:power-series-and-laurent-series}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.powerSeries_is_dvr, SutherlandNumberTheoryLecture1.Chapter1.laurentSeries_valuation_ring}
+\leanok
 [Example: Laurent series valuation]
 \end{example}
 
@@ -351,6 +379,8 @@ Category: external\_result.
 \begin{theorem}[Equivalent characterizations of DVRs]
 \label{Lecture1:Theorem1.16}
 \uses{Lecture1:Discussion_after_1.15, ext:integral-domain, ext:ideal-theory, ext:pid, ext:noetherian-ring, ext:krull-dimension, ext:localization, ext:regular-local-ring, ext:dvr-characterizations-proof}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.dvr_tfae}
+\leanok
 [Theorem: Equivalent characterizations of DVRs]
 \end{theorem}
 
@@ -370,6 +400,8 @@ Category: external\_result.
 \begin{proposition}[Sum and product of integral elements are integral]
 \label{Lecture1:Proposition1.18}
 \uses{Lecture1:Definition1.17, ext:ring, ext:polynomial-ring, ext:algebraic-closure, ext:symmetric-polynomials}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.integral_add, SutherlandNumberTheoryLecture1.Chapter1.integral_mul}
+\leanok
 [Proposition: Sum and product of integral elements are integral]
 \end{proposition}
 
@@ -382,36 +414,48 @@ Category: external\_result.
 \begin{proposition}[Transitivity of integrality]
 \label{Lecture1:Proposition1.20}
 \uses{Lecture1:Definition1.19, ext:ring, ext:transitivity-of-integrality-proof}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.integrality_trans}
+\leanok
 [Proposition: Transitivity of integrality]
 \end{proposition}
 
 \begin{corollary}[Integral closure is integrally closed]
 \label{Lecture1:Corollary1.21}
 \uses{Lecture1:Proposition1.20, ext:ring}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.integralClosure_isIntegrallyClosedIn}
+\leanok
 [Corollary: Integral closure is integrally closed]
 \end{corollary}
 
 \begin{proposition}[Z is integrally closed]
 \label{Lecture1:Proposition1.22}
 \uses{Lecture1:Corollary1.21, ext:integers, ext:rationals, ext:primes-and-divisibility, ext:polynomial-ring, ext:rational-root-test}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.int_isIntegrallyClosed}
+\leanok
 [Proposition: Z is integrally closed]
 \end{proposition}
 
 \begin{corollary}[Every UFD is integrally closed]
 \label{Lecture1:Corollary1.23}
 \uses{Lecture1:Proposition1.22, ext:integers, ext:pid, ext:ufd, ext:rational-root-test}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.ufd_isIntegrallyClosed}
+\leanok
 [Corollary: Every UFD is integrally closed]
 \end{corollary}
 
 \begin{example}[Z[sqrt(5)] is not integrally closed]
 \label{Lecture1:Example1.24}
 \uses{Lecture1:Corollary1.23, ext:integers, ext:polynomial-ring, ext:ufd}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.golden_ratio_integral, SutherlandNumberTheoryLecture1.Chapter1.golden_ratio_not_in_Z_adjoin_sqrt5, SutherlandNumberTheoryLecture1.Chapter1.Z_adjoin_sqrt5_not_integrally_closed}
+\leanok
 [Example: Z[sqrt(5)] is not integrally closed]
 \end{example}
 
 \begin{proposition}[Every valuation ring is integrally closed]
 \label{Lecture1:Proposition1.25}
 \uses{Lecture1:Example1.24, ext:polynomial-ring, ext:fraction-field}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.valuationRing_isIntegrallyClosed}
+\leanok
 [Proposition: Every valuation ring is integrally closed]
 \end{proposition}
 
@@ -431,12 +475,16 @@ Category: external\_result.
 \begin{proposition}[Minimal polynomial of integral element lies in A[x]]
 \label{Lecture1:Proposition1.28}
 \uses{Lecture1:Remark1.27, ext:integral-domain, ext:polynomial-ring, ext:fraction-field, ext:algebraic-closure, ext:field-extensions}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.integral_iff_minpoly_over_base}
+\leanok
 [Proposition: Minimal polynomial of integral element lies in A[x]]
 \end{proposition}
 
 \begin{example}[(1+sqrt(7))/2 is not integral over Z]
 \label{Lecture1:Example1.29}
 \uses{Lecture1:Proposition1.28, ext:integers, ext:polynomial-ring}
+\lean{SutherlandNumberTheoryLecture1.Chapter1.half_one_plus_sqrt7_minimal_poly, SutherlandNumberTheoryLecture1.Chapter1.half_one_plus_sqrt7_not_integral}
+\leanok
 [Example: (1+sqrt(7))/2 is not integral over Z]
 \end{example}
 

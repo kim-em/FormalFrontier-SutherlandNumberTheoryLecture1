@@ -26,6 +26,10 @@ jobs:
 
       - uses: leanprover/lean-action@v1
 
+      # Build LeanArchitect's extract_blueprint binary
+      - name: Build extract_blueprint
+        run: lake build LeanArchitect
+
       # Extract blueprint from compiled Lean using LeanArchitect --all
       - name: Extract blueprint data
         run: |

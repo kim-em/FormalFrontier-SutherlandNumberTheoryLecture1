@@ -3,6 +3,8 @@ import Mathlib.RingTheory.DiscreteValuationRing.Basic
 import Mathlib.RingTheory.LocalRing.ResidueField.Defs
 import Mathlib.Data.ZMod.Basic
 import Mathlib.RingTheory.Int.Basic
+import Mathlib.RingTheory.DedekindDomain.Dvr
+import Mathlib.Data.ZMod.QuotientRing
 
 /-!
 # Example 1.14: Z_(p) as a DVR
@@ -26,12 +28,22 @@ valuation ring with maximal ideal (p) and residue field 𝔽_p. -/
 theorem localization_at_prime_is_dvr (p : ℕ) [hp : Fact (Nat.Prime p)]
     (I : Ideal ℤ) [hI : I.IsPrime] (hIp : I = Ideal.span {(p : ℤ)}) :
     IsDiscreteValuationRing (Localization.AtPrime I) := by
-  sorry
+  have hI_ne_bot : I ≠ ⊥ := by
+    rw [hIp, ne_eq, Ideal.span_singleton_eq_bot]
+    exact mod_cast hp.out.ne_zero
+  exact IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain ℤ hI_ne_bot _
 
 /-- The residue field of ℤ_(p) is isomorphic to ℤ/pℤ. -/
 theorem localization_at_prime_residue_field (p : ℕ) [hp : Fact (Nat.Prime p)]
     (I : Ideal ℤ) [hI : I.IsPrime] (hIp : I = Ideal.span {(p : ℤ)}) :
     Nonempty (IsLocalRing.ResidueField (Localization.AtPrime I) ≃+* ZMod p) := by
-  sorry
+  subst hIp
+  haveI : (Ideal.span {(p : ℤ)}).IsMaximal :=
+    Ideal.IsPrime.isMaximal inferInstance (by
+      rw [ne_eq, Ideal.span_singleton_eq_bot]
+      exact mod_cast hp.out.ne_zero)
+  exact ⟨(IsLocalization.AtPrime.equivQuotMaximalIdeal
+    (Ideal.span {(p : ℤ)}) (Localization.AtPrime _)).symm.trans
+    (Int.quotientSpanNatEquivZMod p)⟩
 
 end SutherlandNumberTheoryLecture1.Chapter1

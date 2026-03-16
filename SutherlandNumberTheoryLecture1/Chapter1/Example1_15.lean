@@ -2,6 +2,7 @@ import Mathlib.RingTheory.PowerSeries.Basic
 import Mathlib.RingTheory.LaurentSeries
 import Mathlib.RingTheory.DiscreteValuationRing.Basic
 import Mathlib.RingTheory.HahnSeries.Valuation
+import Mathlib.RingTheory.PowerSeries.Inverse
 
 /-!
 # Example 1.15: Power Series Ring as a DVR
@@ -22,12 +23,12 @@ namespace SutherlandNumberTheoryLecture1.Chapter1
 
 /-- Example 1.15: The power series ring k[[t]] is a DVR for any field k. -/
 theorem powerSeries_is_dvr (k : Type*) [Field k] :
-    IsDiscreteValuationRing (PowerSeries k) := by
-  sorry
+    IsDiscreteValuationRing (PowerSeries k) :=
+  inferInstance
 
 /-- The order-of-vanishing valuation on k((t)) has valuation ring k[[t]]. -/
 theorem laurentSeries_valuation_ring (k : Type*) [Field k] :
-    ValuationRing (PowerSeries k) := by
-  sorry
+    ValuationRing (PowerSeries k) :=
+  inferInstance
 
 end SutherlandNumberTheoryLecture1.Chapter1

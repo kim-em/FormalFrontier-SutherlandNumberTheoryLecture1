@@ -17,7 +17,6 @@ namespace SutherlandNumberTheoryLecture1.Chapter1
 
 /-- Proposition 1.22: ℤ is integrally closed in its fraction field ℚ.
 This follows from the fact that ℤ is a UFD (hence integrally closed). -/
-theorem int_isIntegrallyClosed : IsIntegrallyClosed ℤ := by
-  sorry
+theorem int_isIntegrallyClosed : IsIntegrallyClosed ℤ := inferInstance
 
 end SutherlandNumberTheoryLecture1.Chapter1

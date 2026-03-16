@@ -23,7 +23,7 @@
   {
     "id": "Lecture1/Definition1.2",
     "type": "definition",
-    "status": "statement_formalized",
+    "status": "sorry_free",
     "lean_file": "SutherlandNumberTheoryLecture1/Chapter1/Definition1_2.lean",
     "aristotle_project_id": ""
   },
@@ -51,7 +51,7 @@
   {
     "id": "Lecture1/Definition1.6",
     "type": "definition",
-    "status": "statement_formalized",
+    "status": "sorry_free",
     "lean_file": "SutherlandNumberTheoryLecture1/Chapter1/Definition1_6.lean",
     "aristotle_project_id": ""
   },
@@ -93,14 +93,14 @@
   {
     "id": "Lecture1/Definition1.10",
     "type": "definition",
-    "status": "statement_formalized",
+    "status": "sorry_free",
     "lean_file": "SutherlandNumberTheoryLecture1/Chapter1/Definition1_10.lean",
     "aristotle_project_id": ""
   },
   {
     "id": "Lecture1/Definition1.11",
     "type": "definition",
-    "status": "statement_formalized",
+    "status": "sorry_free",
     "lean_file": "SutherlandNumberTheoryLecture1/Chapter1/Definition1_11.lean",
     "aristotle_project_id": ""
   },
@@ -163,7 +163,7 @@
   {
     "id": "Lecture1/Definition1.17",
     "type": "definition",
-    "status": "statement_formalized",
+    "status": "sorry_free",
     "lean_file": "SutherlandNumberTheoryLecture1/Chapter1/Definition1_17.lean",
     "aristotle_project_id": ""
   },
@@ -177,7 +177,7 @@
   {
     "id": "Lecture1/Definition1.19",
     "type": "definition",
-    "status": "statement_formalized",
+    "status": "sorry_free",
     "lean_file": "SutherlandNumberTheoryLecture1/Chapter1/Definition1_19.lean",
     "aristotle_project_id": ""
   },

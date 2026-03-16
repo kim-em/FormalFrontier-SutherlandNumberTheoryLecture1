@@ -122,7 +122,7 @@ def main():
         category = ext.get("category", "unknown")
         lines.append(r"\begin{definition}[%s]" % title)
         lines.append(r"\label{%s}" % ext_label)
-        lines.append(r"\notready")
+        lines.append(r"\leanok")
         lines.append(r"Category: %s." % escape_latex(category))
         lines.append(r"\end{definition}")
         lines.append("")

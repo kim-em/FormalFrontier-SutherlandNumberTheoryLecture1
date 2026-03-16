@@ -1,0 +1,436 @@
+[
+  {
+    "ext_id": "ext/field",
+    "mathlib_matches": [
+      {
+        "name": "Field",
+        "type": "exact_match",
+        "notes": "Class in Mathlib; fields, field extensions, characteristic, prime fields all extensively covered"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/ring",
+    "mathlib_matches": [
+      {
+        "name": "CommRing",
+        "type": "exact_match",
+        "notes": "Class in Mathlib; commutative rings with identity, ring homomorphisms fully covered"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/integral-domain",
+    "mathlib_matches": [
+      {
+        "name": "IsDomain",
+        "type": "exact_match",
+        "notes": "Class in Mathlib combining NoZeroDivisors and Nontrivial"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/ideal-theory",
+    "mathlib_matches": [
+      {
+        "name": "Ideal",
+        "type": "exact_match",
+        "notes": "Mathlib.RingTheory.Ideal; prime ideals (Ideal.IsPrime), maximal ideals (Ideal.IsMaximal), principal ideals (Submodule.IsPrincipal), quotient rings (Ideal.Quotient) all fully covered"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/integers",
+    "mathlib_matches": [
+      {
+        "name": "Int",
+        "type": "exact_match",
+        "notes": "The integer ring Z is extensively developed in Mathlib with EuclideanDomain, CommRing, IsDomain instances"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/rationals",
+    "mathlib_matches": [
+      {
+        "name": "Rat",
+        "type": "exact_match",
+        "notes": "The rationals Q with Field instance; IsFractionRing Int Rat available"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/real-numbers",
+    "mathlib_matches": [
+      {
+        "name": "Real",
+        "type": "exact_match",
+        "notes": "Mathlib.Topology.Instances.Real and related; R, R_{>=0} (NNReal), R_{>0} all available with full ordering"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/primes-and-divisibility",
+    "mathlib_matches": [
+      {
+        "name": "Nat.Prime",
+        "type": "exact_match",
+        "notes": "Prime numbers, divisibility, coprimality (Nat.Coprime, Int.gcd) fully covered"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/fundamental-theorem-of-arithmetic",
+    "mathlib_matches": [
+      {
+        "name": "Nat.instUniqueFactorizationMonoid",
+        "type": "exact_match",
+        "notes": "Nat is a UniqueFactorizationMonoid; unique factorization fully formalized"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/finite-fields",
+    "mathlib_matches": [
+      {
+        "name": "ZMod",
+        "type": "exact_match",
+        "notes": "Z/pZ as ZMod p with Field instance when p is prime"
+      },
+      {
+        "name": "GaloisField",
+        "type": "exact_match",
+        "notes": "Finite fields F_q in Mathlib.FieldTheory.Finite.GaloisField"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/polynomial-ring",
+    "mathlib_matches": [
+      {
+        "name": "Polynomial",
+        "type": "exact_match",
+        "notes": "Mathlib.Algebra.Polynomial; polynomial rings, monic polynomials (Polynomial.Monic), irreducible polynomials, minimal polynomials (minpoly) all fully covered"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/fraction-field",
+    "mathlib_matches": [
+      {
+        "name": "FractionRing",
+        "type": "exact_match",
+        "notes": "Mathlib.RingTheory.Localization.FractionRing; fraction field of an integral domain with IsFractionRing typeclass"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/pid",
+    "mathlib_matches": [
+      {
+        "name": "IsPrincipalIdealRing",
+        "type": "exact_match",
+        "notes": "Class in Mathlib.RingTheory.PrincipalIdealDomain; every ideal is principal"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/ufd",
+    "mathlib_matches": [
+      {
+        "name": "UniqueFactorizationMonoid",
+        "type": "exact_match",
+        "notes": "Class in Mathlib.RingTheory.UniqueFactorizationDomain; unique factorization into irreducibles"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/noetherian-ring",
+    "mathlib_matches": [
+      {
+        "name": "IsNoetherianRing",
+        "type": "exact_match",
+        "notes": "Class in Mathlib; equivalent to ACC on ideals and every ideal being finitely generated"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/krull-dimension",
+    "mathlib_matches": [
+      {
+        "name": "krullDim",
+        "type": "exact_match",
+        "notes": "Defined in Mathlib.Order.KrullDimension as supremum of lengths of chains"
+      },
+      {
+        "name": "ringKrullDim",
+        "type": "exact_match",
+        "notes": "Ring-specific Krull dimension via PrimeSpectrum; available in Mathlib.RingTheory.KrullDimension"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/localization",
+    "mathlib_matches": [
+      {
+        "name": "Localization",
+        "type": "exact_match",
+        "notes": "Mathlib.RingTheory.Localization; localization at a multiplicative set, with Localization.AtPrime for localization at prime ideals"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/group-homomorphism",
+    "mathlib_matches": [
+      {
+        "name": "MonoidHom",
+        "type": "exact_match",
+        "notes": "Group/monoid homomorphisms fully covered in Mathlib"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/power-series-and-laurent-series",
+    "mathlib_matches": [
+      {
+        "name": "PowerSeries",
+        "type": "exact_match",
+        "notes": "Mathlib.RingTheory.PowerSeries; formal power series ring k[[t]]"
+      },
+      {
+        "name": "LaurentSeries",
+        "type": "exact_match",
+        "notes": "Defined via HahnSeries in Mathlib.RingTheory.LaurentSeries; Laurent series field k((t))"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/algebraic-closure",
+    "mathlib_matches": [
+      {
+        "name": "AlgebraicClosure",
+        "type": "exact_match",
+        "notes": "Mathlib.FieldTheory.IsAlgClosed.AlgebraicClosure; existence of algebraic closure, field embeddings"
+      },
+      {
+        "name": "IsAlgClosed",
+        "type": "exact_match",
+        "notes": "Typeclass for algebraically closed fields"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/field-extensions",
+    "mathlib_matches": [
+      {
+        "name": "FiniteDimensional",
+        "type": "exact_match",
+        "notes": "Finite-dimensional algebras/modules; used for finite field extensions"
+      },
+      {
+        "name": "IntermediateField",
+        "type": "exact_match",
+        "notes": "Mathlib.FieldTheory.IntermediateField; intermediate fields in extensions"
+      },
+      {
+        "name": "Module.finrank",
+        "type": "exact_match",
+        "notes": "Degree of extension as finrank"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/symmetric-polynomials",
+    "mathlib_matches": [
+      {
+        "name": "MvPolynomial.IsSymmetric",
+        "type": "partial_match",
+        "notes": "Symmetric polynomials exist in Mathlib.RingTheory.MvPolynomial.Symmetric; fundamental theorem of symmetric polynomials is available. The specific fact about coefficients as symmetric functions of roots may need assembly"
+      },
+      {
+        "name": "Polynomial.roots",
+        "type": "related",
+        "notes": "Multiset of roots; Vieta's formulas connecting roots to coefficients"
+      }
+    ],
+    "coverage": "partially_covered"
+  },
+  {
+    "ext_id": "ext/z-module",
+    "mathlib_matches": [
+      {
+        "name": "Module.Free",
+        "type": "exact_match",
+        "notes": "Free modules over Z; Z-lattices available in Mathlib"
+      },
+      {
+        "name": "ZLattice",
+        "type": "related",
+        "notes": "Z-lattices in number field contexts in Mathlib.NumberTheory"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/regular-local-ring",
+    "mathlib_matches": [
+      {
+        "name": "IsRegularLocalRing",
+        "type": "partial_match",
+        "notes": "Regular local rings are defined in Mathlib but the theory is not as fully developed as other ring-theoretic concepts"
+      }
+    ],
+    "coverage": "partially_covered"
+  },
+  {
+    "ext_id": "ext/vector-space",
+    "mathlib_matches": [
+      {
+        "name": "Module",
+        "type": "exact_match",
+        "notes": "Vector spaces are modules over fields in Mathlib; dimension theory fully covered via Module.finrank"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/triangle-inequality",
+    "mathlib_matches": [
+      {
+        "name": "AbsoluteValue.add_le",
+        "type": "exact_match",
+        "notes": "Built into the AbsoluteValue structure as an axiom"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/rational-root-test",
+    "mathlib_matches": [
+      {
+        "name": "num_dvd_of_is_root",
+        "type": "exact_match",
+        "notes": "In Mathlib.RingTheory.Polynomial.RationalRoot; if x/y is a root, then y divides the leading coefficient and x divides the constant term"
+      },
+      {
+        "name": "den_dvd_of_is_root",
+        "type": "exact_match",
+        "notes": "Companion to num_dvd_of_is_root"
+      },
+      {
+        "name": "isInteger_of_is_root_of_monic",
+        "type": "exact_match",
+        "notes": "Integral root theorem: roots of monic polynomials over UFDs are integers"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/discrete-subgroups-of-R",
+    "mathlib_matches": [],
+    "coverage": "not_covered"
+  },
+  {
+    "ext_id": "ext/Z-is-PID",
+    "mathlib_matches": [
+      {
+        "name": "Int.euclideanDomain",
+        "type": "exact_match",
+        "notes": "In Mathlib.Algebra.EuclideanDomain.Int; Z is a Euclidean domain, hence a PID (EuclideanDomain implies IsPrincipalIdealRing)"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/Fq-t-is-PID",
+    "mathlib_matches": [
+      {
+        "name": "Polynomial.instIsPrincipalIdealRing",
+        "type": "partial_match",
+        "notes": "Polynomial rings over fields are Euclidean domains hence PIDs; this applies to F_q[t] since F_q is a field. The instance chain Field -> EuclideanDomain -> IsPrincipalIdealRing covers this"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/every-field-contains-prime-field",
+    "mathlib_matches": [
+      {
+        "name": "CharP",
+        "type": "partial_match",
+        "notes": "Characteristic theory in Mathlib; CharP and CharZero classes. The embedding of Q or F_p into a field is available via algebraMap"
+      },
+      {
+        "name": "Algebra.charZero_of_injective",
+        "type": "related",
+        "notes": "Related results about characteristic and prime subfields exist but the exact statement 'every field contains exactly one prime field' may need assembly"
+      }
+    ],
+    "coverage": "partially_covered"
+  },
+  {
+    "ext_id": "ext/Z-krull-dim-one",
+    "mathlib_matches": [
+      {
+        "name": "IsPrincipalIdealRing.ringKrullDim_eq_one",
+        "type": "exact_match",
+        "notes": "In Mathlib.RingTheory.KrullDimension.PID; PIDs that are not fields have Krull dimension 1. Since Z is a PID and not a field, this gives ringKrullDim Z = 1"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/riemann-zeta",
+    "mathlib_matches": [
+      {
+        "name": "riemannZeta",
+        "type": "partial_match",
+        "notes": "Mathlib.Analysis.SpecialFunctions.Integrals has some Riemann zeta results; the Euler product and basic properties are partially available but analytic continuation is complex"
+      }
+    ],
+    "coverage": "partially_covered"
+  },
+  {
+    "ext_id": "ext/dvr-characterizations-proof",
+    "mathlib_matches": [
+      {
+        "name": "IsDiscreteValuationRing.TFAE",
+        "type": "exact_match",
+        "notes": "In Mathlib.RingTheory.DiscreteValuationRing.TFAE; full TFAE proof of equivalent characterizations of DVRs"
+      }
+    ],
+    "coverage": "fully_covered"
+  },
+  {
+    "ext_id": "ext/transitivity-of-integrality-proof",
+    "mathlib_matches": [
+      {
+        "name": "Algebra.IsIntegral.trans",
+        "type": "exact_match",
+        "notes": "In Mathlib.RingTheory.IntegralClosure.IsIntegralClosure.Basic; transitivity of integrality fully proved"
+      }
+    ],
+    "coverage": "fully_covered"
+  }
+]

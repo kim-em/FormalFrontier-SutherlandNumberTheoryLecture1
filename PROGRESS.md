@@ -130,7 +130,9 @@ All Phase 2 stages completed on 2026-03-16. This phase produced the dependency g
 
 ---
 
-## Phase 3: Formalization — In Progress
+## Phase 3: Formalization — Complete
+
+All Phase 3 stages completed on 2026-03-17. All 27 formalizable items are sorry-free. Dependencies trimmed to actual Lean imports.
 
 ### Stage 3.1: Lean Scaffolding
 **Status:** Complete
@@ -145,8 +147,8 @@ All Phase 2 stages completed on 2026-03-16. This phase produced the dependency g
 | #93 | Batch 5 | Def 1.26; Thm 1.9; Ex 1.24; Ex 1.29 |
 
 ### Stage 3.2: Proof Filling
-**Status:** In progress — 26/27 sorry-free (96%)
-**Date started:** 2026-03-16
+**Status:** Complete — 27/27 sorry-free (100%)
+**Date:** 2026-03-16 to 2026-03-17
 
 **Proof filling PRs:**
 
@@ -161,42 +163,99 @@ All Phase 2 stages completed on 2026-03-16. This phase produced the dependency g
 | #95 | Def 1.26 | Number fields definition |
 | #96 | Ex 1.29 | Non-integral element — nlinarith + algebraic |
 | #100 | Ex 1.24 | Z[√5] not integrally closed — contradiction |
-
-**Remaining:** Theorem 1.9 (Product Formula) — the hardest item, in progress (issue #91).
+| #102 | Thm 1.9 | Product formula — the hardest item |
 
 ### Item Progress Summary
 
 | Status | Count |
 |--------|-------|
-| `sorry_free` | 26 |
-| `statement_formalized` | 1 |
+| `sorry_free` | 27 |
 | `not_applicable` | 11 |
 | **Total** | **38** |
 
-26 of 27 formalizable items are sorry-free. Only Theorem 1.9 remains.
+All 27 formalizable items are sorry-free.
 
 ### Stage 3.3: Dependency Trimming
-**Status:** Blocked on Theorem 1.9 (issue #99)
-**Notes:** Will replace the conservative linear chain in `dependencies/internal.json` with actual Lean import-derived dependencies once all proofs are complete.
+**Status:** Complete
+**Date:** 2026-03-17
+**Notes:** Conservative linear chain in `dependencies/internal.json` replaced with actual Lean import-derived dependencies (PR #107). Result: most Lean files are standalone (no internal imports from other formalized items). Only Corollary 1.5 depends on Lemma 1.4. Discussion items retain dependencies on the formal items they discuss.
 
 ---
 
-## Merged PRs
+---
 
-### Phase 2 (since Phase 1 summary)
+## Final Statistics
+
+| Metric | Value |
+|--------|-------|
+| Total items in book | 38 |
+| Formalizable items | 27 |
+| Sorry-free proofs | 27/27 (100%) |
+| Merged PRs | 48 |
+| Issues created | 58 |
+| Issues closed | 57 |
+| Aristotle escalations | 0 |
+| Project duration | 2 days (2026-03-16 to 2026-03-17) |
+
+### Issue breakdown by type
+
+| Type | Count |
+|------|-------|
+| Feature (implementation) | 29 |
+| Review (quality assurance) | 13 |
+| Transcription | 9 |
+| Summarize (progress analysis) | 4 |
+| Meditate (self-improvement) | 3 |
+
+### Proof strategy distribution
+
+| Strategy | Items | Count |
+|----------|-------|-------|
+| Mathlib API wrappers | Defs, Ex 1.3, Prop 1.18, etc. | ~14 |
+| Theorem wrapping | Thm 1.8, 1.16, Prop 1.28 | 3 |
+| Tactic proofs (ring/nlinarith) | Ex 1.29, Lemma 1.4, Cor 1.5 | 3 |
+| Instance resolution | Defs, DVR examples | ~3 |
+| Contradiction/by_contra | Ex 1.24 | 1 |
+| Complex multi-strategy | Thm 1.9 (Product Formula) | 1 |
+| DVR instance + computation | Ex 1.14, Ex 1.15 | 2 |
+
+## Merged PRs (Complete List)
+
+### Phase 1
+
+| PR | Title | Stage |
+|----|-------|-------|
+| #4 | Source preparation: Stages 1.1-1.3 | 1.1–1.3 |
+| #14 | Transcription setup: conventions + page issues | 1.4 |
+| #15 | Transcribe page 1 | 1.4 |
+| #16 | Transcribe page 2 | 1.4 |
+| #20 | Transcribe page 5 | 1.4 |
+| #21 | Transcribe page 3 | 1.4 |
+| #22 | Transcribe page 4 | 1.4 |
+| #23 | Transcribe page 6 | 1.4 |
+| #24 | Transcribe page 7 | 1.4 |
+| #28 | Transcribe page 8 | 1.4 |
+| #29 | Transcribe backmatter-1 | 1.4 |
+| #30 | Stages 1.5-1.6: Structure Analysis & Blob Extraction | 1.5–1.6 |
+| #34 | Stage 2.1: Internal Dependency Analysis | 2.1 |
+| #35 | Review: Verify transcription quality (pages 2-7) | QA |
+| #38 | Summarize Phase 1 progress | Summary |
+
+### Phase 2
 
 | PR | Title | Stage |
 |----|-------|-------|
 | #41 | Review: Verify structural foundation | QA |
 | #46 | Stage 2.2: External Dependency Analysis | 2.2 |
-| #47 | Review: Verify transcription quality | QA |
+| #47 | Review: Verify transcription quality (pages 1, 8, backmatter) | QA |
 | #50 | Initialize progress/items.json | Infra |
+| #51 | Stage 2.3 Blueprint Assembly + Mathlib coverage | 2.3, 2.4 |
 | #52 | Stage 2.5 + Meditate: Phase 1 reflection and skills | 2.5 |
 | #57 | Review: Verify PR #52 | QA |
 | #60 | Stage 2.6: Readiness Report | 2.6 |
-| #51 | Stage 2.3 Blueprint Assembly + Mathlib coverage | 2.3, 2.4 |
 | #61 | Review: Fix and merge PR #51 | QA |
 | #63 | Stage 2.7: Reference Attachment | 2.7 |
+| #68 | Summarize: Phase 2 progress update | Summary |
 
 ### Phase 3
 
@@ -219,14 +278,11 @@ All Phase 2 stages completed on 2026-03-16. This phase produced the dependency g
 | #96 | Stage 3.2i: Ex 1.29 (Non-Integral Element) | 3.2 |
 | #98 | Review: Pre-Stage-3.3 compilation verification | QA |
 | #100 | Stage 3.2h: Ex 1.24 (Z[√5] Not Integrally Closed) | 3.2 |
-
-## Open Issues
-
-| Issue | Title | Status |
-|-------|-------|--------|
-| #91 | Stage 3.2j: Theorem 1.9 (Product Formula) | Claimed — in progress |
-| #99 | Stage 3.3: Dependency Trimming | Unclaimed — blocked on #91 |
-| #101 | Review: Stage 3.2 Completion Gate | Unclaimed — blocked on #91 |
+| #102 | Stage 3.2j: Theorem 1.9 (Product Formula) | 3.2 |
+| #103 | Summarize: Phase 3 progress checkpoint | Summary |
+| #106 | Review: Stage 3.2 completion gate | QA |
+| #107 | Stage 3.3: Dependency Trimming | 3.3 |
+| #108 | Meditate: Final project retrospective | Skills |
 
 ## Infrastructure and Skills
 
@@ -246,9 +302,8 @@ All Phase 2 stages completed on 2026-03-16. This phase produced the dependency g
 - `lean-proof-strategies` — strategies for filling sorry placeholders
 - `mathlib-api-lookup` — searching for Mathlib declarations
 - `aristotle-escalation` — automated theorem prover escalation
+- `project-retrospective` — transferable lessons from this formalization
 
-## Limitations and Gaps
+## Known Limitations
 
-- **Theorem 1.9 (Product Formula):** The sole remaining sorry — hardest theorem in the lecture, likely needs Aristotle escalation.
-- **Dependencies still conservative:** The linear chain in `dependencies/internal.json` is a placeholder. Stage 3.3 (#99) will replace it with actual dependencies once all proofs are complete.
 - **Blueprint HTML not in CI:** The leanblueprint HTML graph can be built locally but is not part of CI.

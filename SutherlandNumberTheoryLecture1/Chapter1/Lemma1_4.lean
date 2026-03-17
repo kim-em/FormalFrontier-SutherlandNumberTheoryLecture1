@@ -26,7 +26,7 @@ private lemma absval_add_pow_le {k : Type*} [Field k]
           f (x ^ i * y ^ (n - i) * ↑(n.choose i)) := f.sum_le _ _
     _ = ∑ i ∈ Finset.range (n + 1),
           f x ^ i * f y ^ (n - i) * f ↑(n.choose i) := by
-        congr 1; ext i; simp [map_mul, map_pow]
+        congr 1; ext i; simp only [map_mul, map_pow]
     _ ≤ ∑ i ∈ Finset.range (n + 1), f x ^ i * f y ^ (n - i) := by
         apply Finset.sum_le_sum; intro i _
         exact mul_le_of_le_one_right
@@ -37,11 +37,9 @@ private lemma absval_add_pow_le {k : Type*} [Field k]
         rw [Finset.mem_range] at hi
         calc f x ^ i * f y ^ (n - i)
             ≤ max (f x) (f y) ^ i * max (f x) (f y) ^ (n - i) := by
-              apply mul_le_mul
-              · exact pow_le_pow_left₀ (f.nonneg _) (le_max_left _ _) _
-              · exact pow_le_pow_left₀ (f.nonneg _) (le_max_right _ _) _
-              · exact pow_nonneg (f.nonneg _) _
-              · exact pow_nonneg (le_max_of_le_left (f.nonneg _)) _
+              gcongr
+              · exact le_max_left _ _
+              · exact le_max_right _ _
           _ = max (f x) (f y) ^ n := by
               rw [← pow_add]; congr 1; omega
     _ = (↑(n + 1) : ℝ) * max (f x) (f y) ^ n := by
@@ -56,7 +54,7 @@ theorem nonarchimedean_iff_natCast_le_one {k : Type*} [Field k]
   · intro hna _
     exact IsNonarchimedean.apply_natCast_le_one_of_isNonarchimedean hna
   · intro hnat x y
-    rw [show f x ⊔ f y = max (f x) (f y) from rfl]
+    change f (x + y) ≤ max (f x) (f y)
     set M := max (f x) (f y) with hM_def
     have hM : 0 ≤ M := le_max_of_le_left (f.nonneg x)
     refine le_of_forall_gt_imp_ge_of_dense fun a ha => ?_
@@ -75,10 +73,9 @@ theorem nonarchimedean_iff_natCast_le_one {k : Type*} [Field k]
       -- hn : (↑n + 1) * M ^ n < a ^ n
       have key := absval_add_pow_le f hnat x y n
       -- key : f (x + y) ^ n ≤ ↑(n + 1) * max (f x) (f y) ^ n
-      have : (↑(n + 1) : ℝ) = ↑n + 1 := by push_cast; ring
-      rw [this, ← hM_def] at key
-      have hn0 : n ≠ 0 := by
-        intro h; subst h; simp at hn
+      push_cast at key
+      rw [← hM_def] at key
+      have hn0 : n ≠ 0 := by rintro rfl; simp at hn
       exact le_of_pow_le_pow_left₀ hn0 ha0.le (key.trans hn.le)
 
 end SutherlandNumberTheoryLecture1.Chapter1

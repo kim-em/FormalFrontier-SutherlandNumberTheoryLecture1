@@ -52,7 +52,7 @@ theorem golden_ratio_not_in_Z_adjoin_sqrt5 :
   intro hmem
   obtain ⟨a, b, hab⟩ := adjoin_sqrt5_form _ hmem
   have hirr : Irrational (Real.sqrt 5) := by
-    rw [show (5 : ℝ) = ((5 : ℕ) : ℝ) from by norm_num]
+    rw [show (5 : ℝ) = ((5 : ℕ) : ℝ) by norm_num]
     exact irrational_sqrt_natCast_iff.mpr (fun ⟨n, hn⟩ => by
       have : n ≤ 2 := by nlinarith
       interval_cases n <;> omega)
@@ -95,7 +95,9 @@ theorem Z_adjoin_sqrt5_not_integrally_closed :
   -- φ² - φ - 1 = 0 in FractionRing S
   have hφ_eq : φ ^ 2 - φ - 1 = 0 := by
     have ha2 : a ^ 2 - a * b - b ^ 2 = (0 : ↥S) := by
-      ext; simp [a, b]
+      ext
+      simp only [AddSubgroupClass.coe_sub, SubmonoidClass.coe_pow, MulMemClass.coe_mul,
+        ZeroMemClass.coe_zero]
       have h5 : Real.sqrt 5 * Real.sqrt 5 = 5 := Real.mul_self_sqrt (by norm_num)
       nlinarith [h5]
     have h := congr_arg (algebraMap ↥S (FractionRing ↥S)) ha2

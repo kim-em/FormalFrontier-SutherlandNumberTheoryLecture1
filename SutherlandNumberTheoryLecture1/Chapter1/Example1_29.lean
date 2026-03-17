@@ -23,9 +23,7 @@ theorem half_one_plus_sqrt7_minimal_poly :
     let α : ℝ := (1 + Real.sqrt 7) / 2
     α ^ 2 - α - 3 / 2 = 0 := by
   simp only
-  have h7 : (0 : ℝ) ≤ 7 := by norm_num
-  have hsq : Real.sqrt 7 ^ 2 = 7 := Real.sq_sqrt h7
-  nlinarith [hsq]
+  nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 7 by norm_num)]
 
 /-- Example 1.29: (1 + √7)/2 is not integral over ℤ. Its minimal polynomial
 x² - x - 3/2 does not have integer coefficients. -/
@@ -41,10 +39,8 @@ theorem half_one_plus_sqrt7_not_integral :
     have h := h_int.mul h_conj
     have h_prod_eq : ((1 + Real.sqrt 7) / 2) * ((1 - Real.sqrt 7) / 2 : ℝ) =
         ((-3 / 2 : ℚ) : ℝ) := by
-      have h7 : (0 : ℝ) ≤ 7 := by norm_num
-      have hsq : Real.sqrt 7 ^ 2 = 7 := Real.sq_sqrt h7
       push_cast
-      nlinarith [hsq]
+      nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 7 by norm_num)]
     rwa [h_prod_eq] at h
   -- Transfer: IsIntegral ℤ ((-3/2 : ℚ) : ℝ) → IsIntegral ℤ (-3/2 : ℚ)
   have h_rat : IsIntegral ℤ (-3 / 2 : ℚ) := by
@@ -56,8 +52,8 @@ theorem half_one_plus_sqrt7_not_integral :
   -- By ℤ integrally closed: -3/2 must be an integer
   obtain ⟨n, hn⟩ := IsIntegrallyClosed.isIntegral_iff.mp h_rat
   -- But -3/2 is not an integer
-  have : (n : ℚ) = -3 / 2 := by simpa using hn
-  have : (2 : ℚ) * n = -3 := by linarith
-  exact absurd (by exact_mod_cast this : (2 : ℤ) * n = -3) (by omega)
+  have h_eq : (n : ℚ) = -3 / 2 := by simpa using hn
+  have h_two_n : (2 : ℚ) * n = -3 := by linarith
+  exact absurd (by exact_mod_cast h_two_n : (2 : ℤ) * n = -3) (by omega)
 
 end SutherlandNumberTheoryLecture1.Chapter1

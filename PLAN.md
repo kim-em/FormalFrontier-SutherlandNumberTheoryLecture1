@@ -467,6 +467,14 @@ This is when we learn the true dependency structure of the book, which may diffe
 
 **Output:** Updated `dependencies/internal.json` and blueprint reflecting actual dependencies.
 
+### Stage 3.4: Proof Polishing
+
+Polish every non-trivial sorry-free proof to Mathlib quality. Open one GitHub issue (labelled `proof-polish`) per proof that needs attention, then work through them systematically using the `proof-polish` skill.
+
+**Output:** All Lean source files are lint-clean and idiomatic. Every `proof-polish` issue is closed. `progress/items.json` updated with status `proof_polished`.
+
+**Verify:** `lake build` produces zero linter warnings. Every `proof-polish` issue is closed.
+
 ---
 
 ## Progress Tracking
@@ -521,7 +529,7 @@ Commits made during a turn should mention the corresponding progress file in the
 ### Item-level progress: `progress/items.json`
 
 Item statuses flow through:
-`identified` → `extracted` → `statement_formalized` → `proof_formalized` → `sorry_free` → `dependency_trimmed`
+`identified` → `extracted` → `statement_formalized` → `proof_formalized` → `sorry_free` → `dependency_trimmed` → `proof_polished`
 
 Items escalated to Aristotle use: `statement_formalized` → `sent_to_aristotle` → `sorry_free` (success) or `attention_needed` (failure)
 

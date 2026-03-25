@@ -18,52 +18,35 @@ Push sorries earlier. State the theorem first, sorry the proof, then fill in. Do
 ### Spec-Driven Development
 Use `sorry` placeholders with comments explaining what's needed. Never use `True` as a placeholder for propositions — it hides the actual requirements and will need a full refactor to fix.
 
+### Definitions Must Be Constructed
+**Never sorry the body of a `def`, `noncomputable def`, `instance`, or `abbrev`.** A sorry'd definition means the mathematical object does not exist — any theorem referencing it is vacuous. Proof obligations *within* a definition (e.g., `where` clauses) may use sorry, but the data itself must be real. See Stage 3.1 in PLAN.md for details and examples.
+
 ### Discussion Blobs Are First-Class
 During structure analysis (Stage 1.5), unstructured text between numbered items must be identified and tracked just like theorems and definitions. These discussion paragraphs carry context that proofs depend on. Every byte of the book must belong to exactly one blob.
 
 ### Conservative Dependencies
-Store only **direct** dependencies. The conservative default is a linear chain: each item depends only on its immediate predecessor. Never store transitive closure — that creates an O(N²) file with no useful information. We trim to actual direct dependencies later (Stage 3.3) once proofs exist.
+Store only **direct** dependencies. The conservative default is a linear chain: each item depends only on its immediate predecessor. Never store transitive closure — that creates an O(N²) file with no useful information. We trim to actual direct dependencies later (Stage 3.4) once proofs exist.
 
 ## When Stuck
 
-- **3 failed proof attempts**: escalate the proof to Aristotle (see below), then if that also fails, document in a GitHub issue and move on
-- **3 failed attempts on a non-proof sub-task** (definitions, statement formalization): skip it, document in a GitHub issue, move on (Aristotle only handles proofs)
-- **Dependency blocked:** Post an issue with `- [ ] depends on #X` and add the `blocked` label
+### Read the book first (mandatory)
+
+**Before attempting any proof**, read the blob file for the item (`blobs/<Chapter>/<Item>.md`). The book contains the proof strategy — follow it. Do not invent your own proof approach from mathematical knowledge.
+
+If the book's proof says "by Lemma X.Y.Z" or "the result follows from [earlier result]":
+1. Find that earlier result in the project (search `blobs/` and the Lean files)
+2. Use it in your proof — even if it still has a `sorry`. A sorry'd dependency is not a blocker.
+
+**Never say "not in Mathlib" without first checking the book.** The book's proofs build on earlier results in the book. Those results are what you should be using — not searching Mathlib for advanced infrastructure like Schur functors or Schur-Weyl duality when the book uses an elementary lemma from the previous page.
+
+### Escalation ladder
+
+- **3 failed attempts on any sub-task** (proof, definition construction, statement formalization): document in a GitHub issue and move on
+- **Dependency blocked:** Post an issue with `- [ ] depends on #X` and add the `blocked` label — but only for *definition-level* blockers, never for proof-level sorries
 - **Definition seems wrong:** Post an issue describing the problem — don't silently work around bad definitions
-- **Missing Mathlib API:** Post an issue describing what's needed; another agent or human can add it
+- **Definition-level sorry found:** This is highest priority. The mathematical object must be constructed — see "Definitions Must Be Constructed" above. Create an issue and fix it before proving downstream theorems.
+- **Missing Mathlib API:** First check whether the missing result is an earlier item in the book. If it is, that's a dependency, not a missing Mathlib API. If genuinely missing from Mathlib, **prove it here** — that's the highest-priority work, not a reason to defer. This project exists to formalize what isn't in Mathlib.
 - **Ordering mistake in the plan:** Report it — request a replan rather than hacking around it
-
-## Aristotle Escalation
-
-Aristotle is an automated theorem prover. Escalate to it when Claude can't prove a theorem after 2-3 serious attempts.
-
-### When to use Aristotle
-
-- A proof is beyond Claude's ability after multiple attempts
-- Standard mathematical proofs (calculus, algebra, analysis) that follow well-known patterns
-- Batch proving: after Stage 3.1 scaffolding, submit all sorry'd theorems
-
-### When NOT to use Aristotle
-
-- Statement formalization (translating definitions/theorem statements from natural language) — Claude handles this
-- When the formalized statement might be wrong — fix the statement first
-- For discussion blobs or non-theorem items
-
-### Handoff protocol
-
-1. Create a temporary copy of the item's Lean file (preserving all imports, namespaces, notation). Keep exactly one `sorry` (the target proof); change all others to `admit`.
-2. Gather context files: sorry-free local Lean files from the import chain (skip Mathlib imports). If no local files are sorry-free yet, submit with no context files.
-3. Submit: `aristotle prove-from-file item_pending.lean --no-wait --no-auto-add-imports --context-files ...`
-4. Record the project ID in `progress/items.json` with status `sent_to_aristotle`
-5. Delete the temp file — never commit `admit`
-
-**Deduplication:** Before submitting, check that the item is not already in `sent_to_aristotle` status. Only one submission per item at a time.
-
-### After Aristotle returns
-
-- **Success:** Verify the proof compiles (`lake env lean`), copy into the item's Lean file, update status to `sorry_free` (if all sorries resolved) or `proof_formalized`
-- **False statement:** Mark `attention_needed`, post a GitHub issue with the counterexample — the formalized statement needs fixing
-- **Failure/timeout/version mismatch:** Mark `attention_needed`, move on
 
 ## PR Workflow
 
@@ -98,7 +81,6 @@ Never skip this step. Downstream agents are blocked on `main` until merged PRs l
 - **Per-turn handoff files:** `progress/YYYY-MM-DDTHH-MM-SSZ.md` (UTC timestamp)
 - Stage-level summary: `PROGRESS.md` (optional, human-facing)
 - Item-level: `progress/items.json`
-- Formalization status: tracked in `progress/items.json`
 - Do NOT modify `PLAN.md` — it is the reference plan
 - Blockers and discussion: GitHub issues
 
